@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "module": "commonjs",
+        /*"outDir": "build",*/
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "esModuleInterop": true,
+        /*"jsx": "react"*/ /** 必須*/
+    }
+}
