@@ -2,6 +2,8 @@
  * Draggable Card
  * methods:
  * getID: return this._id
+ * enableSlide: whether enable slide or not
+ * setColor: set text color
  */
 export default class DraggableCard extends HTMLElement {
     private _id: string;
@@ -62,6 +64,17 @@ export default class DraggableCard extends HTMLElement {
     }
     getID() {
         return this._id;
+    }
+    enableSlide() {
+        return this.enableSlide;
+    }
+    setColor(color: string) {
+        if (this._mainText) {
+            this._mainText.style.color = color;
+        }
+        if (this._subText) {
+            this._subText.style.color = color;
+        }
     }
     attributeChangedCallback(attr: string, oldValue: string, newValue: string) {
         if (attr === "data-text1") {

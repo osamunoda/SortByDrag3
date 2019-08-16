@@ -12,7 +12,9 @@ export interface FrameProps {
     columns: number,
     frameWidth: number,
     cellHeight: number,
-    cards: CardProps[]
+    cards: CardProps[],
+    textColor: string,
+    canSlide: boolean
 }
 /**
  * Draggable Area of cards
@@ -32,14 +34,18 @@ export default class DraggableFrame extends HTMLElement {
     private _frameWidth: number;
     private _frame: HTMLDivElement;
     private _shadow: ShadowRoot | null;
+    private textColor: string;
+    private enableSlide: boolean;
 
-    constructor(columns: number, frameWidth: number, cellHeight: number, cards: CardProps[]) {
+    constructor(columns: number, frameWidth: number, cellHeight: number, cards: CardProps[], textColor: string, enableSlide: boolean) {
         super();
         this._cards = cards;
         this._columns = columns;
         this._frameWidth = frameWidth;
         this._cellHeight = cellHeight;
         this._cellWidth = this._frameWidth / this._columns;
+        this.textColor = textColor;
+        this.enableSlide = enableSlide;
         const shadow = this.attachShadow({ mode: "closed" });
         shadow.innerHTML = `<style>
         :host{
@@ -58,9 +64,13 @@ export default class DraggableFrame extends HTMLElement {
     getFrame() {
         return this._frame;
     }
+    canSlide() {
+        return this.enableSlide;
+    }
     connectedCallback() {
         this._cards.forEach((item: CardProps) => {
             const card = new DraggableCard(this._cellWidth, this._cellHeight, item.background, item.text1, item.text2, item.id);
+            card.setColor(this.textColor);
             if (this._frame)
                 this._frame.appendChild(card);
         });

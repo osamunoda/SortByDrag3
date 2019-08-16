@@ -27,6 +27,7 @@ export default class ButtonPanel extends HTMLElement {
     private option: () => void;
     private labels: { [key: string]: SVGIcon };/** SVGIcons Map */
     private currentLabel: string;/** current set */
+    private cardID: string;
     private svgIcon: SVGIcon;/** a set of icon,label,handler */
     private _shadow: ShadowRoot;
     private _svg: HTMLElement | null;
@@ -56,7 +57,7 @@ export default class ButtonPanel extends HTMLElement {
             background: "rgb(0,0,160)",
             color: "white",
             handler: () => {
-                location.href = "fmp://$/__SORTDB__?script=sortByDrag_info";
+                location.href = "fmp://$/__SORTDB__?script=sortByDrag_info&$selectedID=" + this.cardID;
             }
         };
         this.labels["info"] = infoIcon;
@@ -65,7 +66,7 @@ export default class ButtonPanel extends HTMLElement {
             code: `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`,
             background: "rgb(160,0,0)",
             color: "white",
-            handler: () => { location.href = "fmp://$/__SORTDB__?script=sortByDrag_delete"; }
+            handler: () => { location.href = "fmp://$/__SORTDB__?script=sortByDrag_delete&$selectedID=" + this.cardID; }
         };
         this.labels["delete"] = deleteIcon;
 
@@ -132,6 +133,9 @@ export default class ButtonPanel extends HTMLElement {
     }
     addIcon(svgIcon: SVGIcon) {
         this.labels[svgIcon.label] = svgIcon;
+    }
+    setCardID(id: string) {
+        this.cardID = id;
     }
 }
 customElements.define("button-panel", ButtonPanel);

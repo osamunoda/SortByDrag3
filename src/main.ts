@@ -21,12 +21,20 @@ const cards = [
         return obj
     });
 const columnCount = Number.isNaN(Number("__COLUMNS__")) ? 1 : Number("__COLUMNS__");
+const cardHeight = Number.isNaN(Number("__CARDHEIGHT__")) ? 200 : Number("__CARDHEIGHT__");
+let textColor = "__TEXTCOLOR__";
+textColor = ("__textcolor__" === textColor.toLocaleLowerCase()) ? "black" : textColor;
+
+let enableSlide: string = String("__ENABLESLIDE__");
+let canSlide = (enableSlide === "true");
 
 const props: FrameProps = {
     columns: columnCount,
-    cellHeight: 200,
+    cellHeight: cardHeight,
     frameWidth: window.innerWidth,
-    cards: cards
+    cards: cards,
+    textColor: textColor,
+    canSlide: canSlide
 }
 const buttonPanelProps: ButtonPanelProps = {
     width: 80,
@@ -34,7 +42,7 @@ const buttonPanelProps: ButtonPanelProps = {
 }
 
 // create a draggable frame and acreds
-const frame = new DraggableFrame(props.columns, props.frameWidth, props.cellHeight, props.cards);
+const frame = new DraggableFrame(props.columns, props.frameWidth, props.cellHeight, props.cards, textColor, canSlide);
 const buttonPanel = new ButtonPanel(buttonPanelProps.width, buttonPanelProps.height);
 
 const root = document.getElementById("root");

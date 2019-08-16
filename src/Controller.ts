@@ -39,6 +39,7 @@ export default class Controller {
     private notSelectedPositions: Point[];/** array of positions(selected panel is excluded) */
     private notSelectedPanels: HTMLElement[];/** array of panels(selected panel is excluded) */
     private startPanelsOrder: string | null;/** panel id list delimitted by '_' */
+    private enableSlide: boolean;
     //members not used
     private frameWidth: number;
     private bounding: DOMRect | ClientRect; /** bounidng of the taeget */
@@ -107,13 +108,14 @@ export default class Controller {
                 setTimeout(() => {
                     if (this._prevTarget) {
                         if (this._buttonPanel) {
+                            this._buttonPanel.style.zIndex = "-1";
                             this._buttonPanel.style.display = "none";
                             this._buttonPanel.style.opacity = "0";
                         }
                         this.setBasicStyle(this._prevTarget);
                         this._prevTarget.style.transform = "none";
                     }
-                }, 1000);
+                }, 200);
                 this.mouseUpHandler(e);
                 return;
             }
@@ -172,6 +174,7 @@ export default class Controller {
             if (this.buttonMode) {
                 this.buttonMode = "";
                 if (this._buttonPanel) {
+                    this._buttonPanel.style.zIndex = "-1";
                     this._buttonPanel.style.display = "none";
                     this._buttonPanel.style.opacity = "0";
                 }
@@ -259,6 +262,10 @@ export default class Controller {
                             this.dragDirection = 1
                         } else if (absDiffX > 20 && absDiffY < 10) {
                             this.dragDirection = -1;
+                        }
+                        console.log("slide", this.enableSlide);
+                        if (!this.enableSlide) {
+                            this.dragDirection = 1;
                         }
                     }
                 }
@@ -579,6 +586,7 @@ export default class Controller {
         this.panelHeight = dFrame.getCardHeight();
         this.frameWidth = dFrame.getFrameWidth();
         this.columns = dFrame.getColumns();
+        this.enableSlide = dFrame.canSlide();
     }
     setupHandlers() {
         if (!this._frame) return;
@@ -623,6 +631,11 @@ export default class Controller {
                 this._buttonPanel.changeIcon(label);
                 this._buttonPanel.style.transition = "0.6s";
                 this._buttonPanel.style.display = "flex";
+                this._buttonPanel.style.zIndex = "10";
+                const cardID: string = this.getPanelsIDList() || "";
+                const cardIDarray = cardID.split("_");
+                const id = cardIDarray[index];
+                this._buttonPanel.setCardID(id);
                 setTimeout(() => {
                     if (this._buttonPanel) {
                         this._buttonPanel.style.opacity = "1";
